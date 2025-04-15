@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Şirket Aracı Rezervasyon Sistemi</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- FullCalendar CSS and JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Optional: Basic calendar styling */
+        #calendar {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: white; /* Add background for better visibility */
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Yükleniyor...</p>
+    </div>
+
+    <header class="header">
+        <div>
+            <img src="https://www.shipglobaltr.com/Content/img/1PNG.png" alt="ShipGlobal Logo">
+        </div>
+        <div>
+            <h1>Şirket Aracı Rezervasyon Sistemi</h1>
+        </div>
+        <div id="user-info" style="display: none;">
+            <!-- Currency Rates Placeholder (Added) -->
+            <div id="currency-rates">
+                 <span class="currency">USD: <span id="rate-usd" class="rate-value">--</span> <i class="rate-change-icon fas"></i></span>
+                 <span class="currency">EUR: <span id="rate-eur" class="rate-value">--</span> <i class="rate-change-icon fas"></i></span>
+                 <span class="currency">GBP: <span id="rate-gbp" class="rate-value">--</span> <i class="rate-change-icon fas"></i></span>
+            </div>
+            <!-- Weather Widget Placeholder -->
+            <div id="weather-widget">
+                <span id="weather-temp">--</span>&deg;C 
+                <img id="weather-icon" src="" alt="Hava Durumu" style="height: 20px; vertical-align: middle; margin-left: 5px;">
+                <span id="weather-desc">--</span>
+                (<span id="weather-city">--</span>)
+            </div>
+            <span id="user-email"></span>
+            <button id="logout-button">Çıkış Yap</button>
+            <button id="darkModeToggle" class="theme-toggle-button">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Auth Container -->
+    <div id="auth-container" class="container">
+        <!-- Login Form -->
+        <div id="login-section">
+            <h2>Giriş Yap</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email:</label>
+                    <input type="email" id="login-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Şifre:</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <button type="submit">Giriş Yap</button>
+                <p id="login-error" class="error-message"></p>
+            </form>
+            <p>Hesabınız yok mu? <a href="#" id="show-register">Kayıt Olun</a></p>
+        </div>
+
+        <!-- Register Form (Initially Hidden) -->
+        <div id="register-section" style="display: none;">
+            <h2>Kayıt Ol</h2>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-firstName">Ad:</label>
+                    <input type="text" id="register-firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-lastName">Soyad:</label>
+                    <input type="text" id="register-lastName" name="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email:</label>
+                    <input type="email" id="register-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Şifre:</label>
+                    <input type="password" id="register-password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">Şifre Tekrar:</label>
+                    <input type="password" id="register-confirm-password" name="confirmPassword" required>
+                </div>
+                <button type="submit">Kayıt Ol</button>
+                <p id="register-error" class="error-message"></p>
+            </form>
+            <p>Zaten hesabınız var mı? <a href="#" id="show-login">Giriş Yapın</a></p>
+        </div>
+    </div>
+
+    <!-- App Content (Initially Hidden) -->
+    <div id="app-content" class="container" style="display: none;">
+
+        <!-- Calendar Section (Filters moved back here) -->
+        <div id="calendar-section">
+            <h2>Takvim</h2>
+             <!-- Filter Container (Moved back) -->
+            <div id="filter-container"> 
+                 <div class="form-group">
+                      <label for="department-filter">Departman:</label>
+                      <select id="department-filter">
+                         <option value="">Tümü</option>
+                         <option value="IT">IT</option>
+                         <option value="HR">İK</option>
+                         <option value="Sales">Satış</option>
+                         <option value="Marketing">Pazarlama</option>
+                         <option value="Management">Yönetim</option>
+                         <option value="Other">Diğer</option>
+                      </select>
+                 </div>
+                  <div class="form-group">
+                      <label for="start-date-filter">Başlangıç:</label>
+                      <input type="date" id="start-date-filter">
+                 </div>
+                 <div class="form-group">
+                      <label for="end-date-filter">Bitiş:</label>
+                      <input type="date" id="end-date-filter">
+                 </div>
+                  <button type="button" id="clear-filters-button" class="button-secondary button-small">Filtreleri Temizle</button>
+              </div>
+            <div id="calendar"></div>
+        </div>
+
+        <!-- Form Section (Back to being direct child of app-content) -->
+        <div id="form-section">
+            <h2 id="form-title">Yeni Rezervasyon</h2>
+            <form id="new-reservation">
+                <input type="hidden" id="editing-reservation-id" />
+                <div class="form-group">
+                    <label for="department">Departman:</label>
+                    <select id="department" name="department" required>
+                        <option value="" disabled selected>Seçiniz...</option>
+                        <option value="ON">ON</option>
+                        <option value="TEAMLIZGE">TEAMLIZGE</option>
+                        <option value="RU">RU</option>
+                        <option value="IZMIR">IZMIR</option>
+                        <option value="MUHASEBE">MUHASEBE</option>
+                        <option value="GUMRUK">GUMRUK</option>
+                        <option value="Diğer">Diğer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="aciklama">Açıklama (Opsiyonel):</label>
+                    <textarea id="aciklama" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="start-date">Başlangıç Tarihi:</label>
+                        <input type="date" id="start-date" name="startDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="start-time">Başlangıç Saati:</label>
+                        <input type="time" id="start-time" name="startTime" step="1800" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="end-date">Bitiş Tarihi:</label>
+                        <input type="date" id="end-date" name="endDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end-time">Bitiş Saati:</label>
+                        <input type="time" id="end-time" name="endTime" step="1800" required>
+                    </div>
+                </div>
+                <div id="reservation-error" class="error-message"></div>
+                <div id="conflict-warning" class="warning-message" style="display: none;"></div>
+                <div class="form-actions">
+                    <button type="submit" id="form-submit-button" class="button-primary">Rezervasyon Yap</button>
+                    <button type="button" id="cancel-edit-button" class="button-secondary" style="display: none;">İptal</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Event Action Modal (Keep outside grid structure) -->
+        <div id="event-action-modal" class="modal">
+            <div class="modal-content">
+                 <button class="close-button" id="modal-close-button">&times;</button> 
+                <h3 id="modal-title">Rezervasyon Detayları</h3>
+                <div id="modal-event-details"></div>
+                <div class="modal-actions">
+                    <button id="modal-edit-button" class="button-primary">Düzenle</button>
+                    <button id="modal-delete-button" class="button-danger">Sil</button>
+                    <button id="modal-secondary-close-button" class="button-secondary">Kapat</button> 
+                </div>
+            </div>
+        </div>
+
+    </div> <!-- End of app-content -->
+
+    <script src="script.js"></script>
+</body>
+</html>

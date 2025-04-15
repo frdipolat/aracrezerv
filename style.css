@@ -1,0 +1,967 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* --- Light Mode (Default) --- */
+    --primary-color: #4A90E2;
+    --primary-dark: #357ABD;
+    --accent-color: #F5A623;
+    --accent-dark: #D98E1C;
+    --background-color: #f9fafb; /* Light Gray */
+    --card-background: #ffffff; /* White */
+    --text-color: #1f2937; /* Dark Gray */
+    --text-light: #6b7280; /* Medium Gray */
+    --text-on-primary: #ffffff;
+    --border-color: #e5e7eb; /* Light Gray Border */
+    --input-background: #ffffff;
+    --input-border: var(--border-color);
+    --danger-color: #e53e3e;
+    --success-color: #38a169;
+    --warning-color: var(--accent-color);
+    --box-shadow-color: rgba(0, 0, 0, 0.07);
+    --box-shadow-lg-color: rgba(0, 0, 0, 0.08);
+    --fc-bg-color: var(--card-background); /* Calendar background */
+    --fc-text-color: var(--text-color); /* Calendar text */
+    --fc-border-color: var(--border-color); /* Calendar border */
+    --fc-today-bg-color: #eef2ff; /* Light blue for today */
+
+    /* --- Shared Variables --- */
+    --box-shadow: 0 4px 6px -1px var(--box-shadow-color), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    --box-shadow-lg: 0 10px 15px -3px var(--box-shadow-lg-color), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
+    --border-radius: 6px;
+    --input-height: 42px;
+    --button-height: 42px;
+    --transition-speed: 0.2s;
+}
+
+/* --- Dark Mode --- */
+body.dark-mode {
+    --primary-color: #60a5fa; /* Lighter Blue */
+    --primary-dark: #3b82f6;
+    --accent-color: #facc15; /* Lighter Yellow/Orange */
+    --accent-dark: #eab308;
+    --background-color: #1f2937; /* Dark Gray-Blue */
+    --card-background: #374151; /* Medium Gray-Blue */
+    --text-color: #f3f4f6; /* Very Light Gray */
+    --text-light: #9ca3af; /* Lighter Gray */
+    --text-on-primary: #ffffff;
+    --border-color: #4b5563; /* Darker Gray Border */
+    --input-background: #4b5563; /* Darker Input Background */
+    --input-border: #6b7280; /* Lighter border for contrast */
+    --danger-color: #f87171; /* Lighter Red */
+    --success-color: #4ade80; /* Lighter Green */
+    --warning-color: var(--accent-color);
+    --box-shadow-color: rgba(0, 0, 0, 0.3);
+    --box-shadow-lg-color: rgba(0, 0, 0, 0.4);
+    --fc-bg-color: var(--card-background);
+    --fc-text-color: var(--text-color);
+    --fc-border-color: var(--border-color);
+    --fc-today-bg-color: rgba(96, 165, 250, 0.2); /* Semi-transparent blue */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding-top: 65px; /* Adjusted for new header height */
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--card-background);
+    padding: 0 30px; /* Adjusted padding */
+    box-shadow: var(--box-shadow);
+    height: 65px;
+    z-index: 1000;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header img {
+    max-height: 40px; /* Slightly smaller */
+    width: auto;
+}
+
+.header h1 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 0;
+    /* Optional: Add some letter spacing */
+    /* letter-spacing: 0.5px; */
+}
+
+#user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.9rem;
+}
+
+#user-info #user-email {
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+/* Weather Widget Styling (Added) */
+#weather-widget {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Small gap between elements */
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-right: 15px; /* Space before user email */
+    border-right: 1px solid var(--border-color); /* Separator */
+    padding-right: 15px; /* Padding after separator */
+}
+
+#weather-widget img {
+    height: 25px; /* Adjust icon size */
+    width: auto;
+    vertical-align: middle;
+}
+
+#weather-city {
+    font-style: italic; /* Italicize city name */
+}
+
+/* End Weather Widget Styling */
+
+/* Currency Rates Styling (Added) */
+#currency-rates {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between currencies */
+    font-size: 0.85rem; /* Slightly smaller */
+    color: var(--text-light);
+    margin-right: 15px;
+    border-right: 1px solid var(--border-color); /* Separator */
+    padding-right: 15px;
+}
+
+.currency {
+    /* Optional: Add background or border */
+    /* padding: 2px 5px; */
+    /* background-color: #f1f3f5; */
+    /* border-radius: 3px; */
+}
+
+.currency span.rate-value { /* The rate value */
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+/* Currency Change Icon Styling (Added) */
+.rate-change-icon {
+    font-size: 0.8em; /* Make icon slightly smaller */
+    margin-left: 4px;
+    /* Hide by default if no class is added */
+    display: inline-block; /* Ensure it takes space */
+    width: 1em; /* Reserve space */
+    text-align: center;
+    opacity: 0; /* Hide initially */
+    transition: opacity 0.3s ease, color 0.3s ease; /* Fade effect */
+}
+
+.rate-change-icon.show {
+    opacity: 1;
+}
+
+.rate-change-icon.rate-up {
+    color: var(--success-color); /* Green for up */
+}
+
+.rate-change-icon.rate-down {
+    color: var(--danger-color); /* Red for down */
+}
+
+/* End Currency Rates Styling */
+
+#logout-button {
+    background-color: var(--accent-color);
+    color: var(--text-on-primary);
+    padding: 7px 14px; /* Adjusted padding */
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 0.85rem; /* Slightly smaller */
+    font-weight: 500;
+    transition: background-color var(--transition-speed) ease;
+    line-height: 1; /* Ensure text vertical alignment */
+}
+
+#logout-button:hover {
+    background-color: var(--accent-dark);
+}
+
+/* Style for the theme toggle button */
+.theme-toggle-button {
+    background-color: transparent; /* Make background transparent */
+    border: 1px solid var(--border-color);
+    color: var(--text-light); /* Use light text color */
+    width: 32px; /* Fixed width */
+    height: 32px; /* Fixed height */
+    padding: 0; /* Remove padding */
+    display: inline-flex; /* Use flex to center icon */
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* Make it circular */
+    font-size: 0.9rem; /* Adjust icon size */
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+}
+
+.theme-toggle-button:hover {
+    background-color: var(--background-color); /* Subtle background on hover */
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.container {
+    max-width: 1200px; /* Slightly wider */
+    margin: 30px auto; /* Reduced top margin */
+    padding: 0 20px;
+}
+
+/* Auth Container Specifics */
+#auth-container {
+    max-width: 400px; /* Narrower */
+    background-color: var(--card-background);
+    padding: 35px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-lg); /* More prominent shadow */
+    margin: 50px auto; /* Center vertically */
+}
+
+#auth-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+#auth-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px; /* Adjusted gap */
+}
+
+#auth-container .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px; /* Reduced gap */
+}
+
+#auth-container label {
+    font-weight: 500;
+    font-size: 0.85rem; /* Smaller label */
+    color: var(--text-light);
+}
+
+/* --- Modern Input Styling --- */
+input[type="email"],
+input[type="password"],
+input[type="text"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="time"], /* Added time input */
+textarea,
+select {
+    width: 100%;
+    height: var(--input-height);
+    padding: 0 12px;
+    border: 1px solid var(--input-border); /* Use variable */
+    border-radius: var(--border-radius);
+    font-size: 0.95rem;
+    font-family: inherit;
+    background-color: var(--input-background); /* Use variable */
+    color: var(--text-color); /* Use variable */
+    transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease, background-color var(--transition-speed) ease, color var(--transition-speed) ease; /* Added transitions */
+}
+
+textarea {
+    height: auto; /* Allow textarea to resize */
+    min-height: 80px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    resize: vertical; /* Allow vertical resize */
+}
+
+select {
+    appearance: none; /* Remove default arrow */
+    /* Updated SVG for better dark mode visibility - using currentColor */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center; /* Position arrow */
+    background-size: 16px 12px; /* Size arrow */
+    padding-right: 2.5rem; /* Make space for arrow */
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2); /* Adjusted focus shadow */
+}
+
+/* --- Modern Button Styling --- */
+button {
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease, transform var(--transition-speed) ease;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    padding: 0 18px; /* Horizontal padding */
+    height: var(--button-height);
+    font-size: 0.95rem;
+    border: 1px solid transparent; /* Base border */
+    line-height: calc(var(--button-height) - 2px); /* Adjust line height for border */
+}
+
+button[type="submit"],
+.button-primary {
+    background-color: var(--primary-color);
+    color: var(--text-on-primary);
+    border-color: var(--primary-color);
+}
+
+button[type="submit"]:hover,
+.button-primary:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    transform: translateY(-1px); /* Subtle lift effect */
+}
+
+button[type="button"],
+.button-secondary {
+    background-color: var(--card-background);
+    color: var(--primary-color);
+    border: 1px solid var(--border-color);
+}
+
+button[type="button"]:hover,
+.button-secondary:hover {
+    background-color: #f1f3f5; /* Light gray background on hover */
+    border-color: #ced4da; /* Slightly darker border */
+}
+
+.button-danger {
+     background-color: var(--danger-color);
+     color: #fff;
+     border-color: var(--danger-color);
+}
+.button-danger:hover {
+     background-color: #c53030; /* Darker red */
+     border-color: #c53030;
+     transform: translateY(-1px);
+}
+
+.button-small {
+    height: auto;
+    line-height: 1.4;
+    padding: 4px 8px; /* Smaller padding */
+    font-size: 0.8rem; /* Smaller font */
+}
+
+
+#auth-container a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color var(--transition-speed) ease;
+}
+
+#auth-container a:hover {
+    color: var(--primary-dark);
+    text-decoration: underline;
+}
+
+/* App Content Specifics */
+#app-content.container {
+    display: grid;
+    grid-template-columns: 1fr; /* Default single column */
+    gap: 30px;
+    max-width: 1200px;
+}
+
+/* Adjust grid for wider screens */
+@media (min-width: 992px) {
+    #app-content.container {
+        /* Revert to previous layout (e.g., 2fr 1fr or 1fr 1fr) */
+        /* Let's try 2fr 1fr with Calendar first */
+        grid-template-columns: 2fr 1fr; 
+        align-items: start; 
+    }
+     /* Revert order */
+     #calendar-section { order: 1; } 
+     #form-section { order: 2; } 
+}
+
+/* Remove styles for #controls-section and #filter-container-wrapper */
+/* #controls-section { ... } */
+/* #filter-container-wrapper { ... } */
+/* #filter-container-wrapper h2 { ... } */
+
+/* Restore styles for #calendar-section and #form-section as direct children */
+#calendar-section,
+#form-section {
+    background-color: var(--card-background);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+#calendar-section h2,
+#form-section h2#form-title {
+    color: var(--primary-color);
+    margin: -30px -30px 25px -30px;
+    padding: 18px 30px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1.15rem;
+    border-bottom: 1px solid var(--border-color);
+    background-color: #fffefd;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+
+/* Restore Filter Container styles (horizontal layout) */
+#filter-container {
+    display: flex;
+    /* flex-direction: column; <<< Remove this */
+    gap: 15px;
+    margin-bottom: 20px;
+    align-items: center; /* Align items vertically */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#filter-container .form-group {
+     /* Should be fine */
+     margin-bottom: 0; /* Remove extra margin if added */
+}
+#filter-container label {
+     /* Fine */
+}
+#filter-container select,
+#filter-container input[type="date"] {
+     height: 38px; 
+     font-size: 0.9rem;
+     flex-grow: 1; /* Allow inputs to grow */
+     min-width: 150px;
+}
+
+#filter-container button {
+     align-self: center; /* Vertically align */
+     margin-left: auto; /* Push clear button to the right */
+     height: 38px; 
+     padding: 0 15px;
+     font-size: 0.9rem;
+     flex-shrink: 0; 
+}
+
+/* Remove responsive override for filters if it was specific to column layout */
+/* @media (max-width: 991px) { ... #filter-container { flex-direction: row; } ... } */
+/* The default flex-wrap should handle smaller screens now */
+
+/* FullCalendar Customization */
+#calendar {
+    max-width: 1100px; /* Wider calendar */
+    margin: 25px auto;
+    background-color: var(--fc-bg-color); /* Use Variable */
+    padding: 15px;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--fc-border-color); /* Use Variable */
+    box-shadow: var(--box-shadow);
+    color: var(--fc-text-color); /* Use variable for general calendar text */
+}
+
+/* Style calendar header buttons */
+.fc .fc-button {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--text-on-primary);
+    opacity: 1;
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+    box-shadow: none;
+    text-transform: capitalize;
+    font-weight: 500;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    height: auto;
+    line-height: 1.5;
+}
+
+.fc .fc-button:hover {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active,
+.fc .fc-button-primary:not(:disabled):active {
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+    color: var(--text-on-primary);
+}
+
+.fc .fc-toolbar-title {
+    color: var(--text-color); /* Ensure title uses text color variable */
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+
+.fc .fc-daygrid-day-number,
+.fc .fc-col-header-cell-cushion { /* Added column header */
+    color: var(--text-light); /* Lighter text for dates/headers */
+}
+
+.fc-day-today {
+    background-color: var(--fc-today-bg-color) !important; /* Use variable, override default */
+}
+
+.fc-day-sat, .fc-day-sun { /* Weekend days */
+    background-color: rgba(0, 0, 0, 0.02); /* Very subtle background */
+}
+
+/* --- Calendar Event Styling --- */
+.fc-event {
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    position: relative;
+    border: 1px solid var(--primary-dark);
+    background-color: var(--primary-color);
+    color: var(--text-on-primary) !important; /* Ensure text on event is readable */
+}
+
+.fc-event:hover {
+    background-color: var(--primary-dark);
+}
+
+/* Event Content Styling */
+.fc-event-main {
+    /* padding-left: 22px; Remove space for icon */
+}
+
+.fc-event-main-frame {
+    /* Adjust default FullCalendar structure if needed */
+}
+
+.fc-event-title-container {
+     /* Adjust default FullCalendar structure if needed */
+}
+
+/* Car Icon Styling */
+.fc-event .event-icon {
+     /* Remove icon styles */
+    /* position: absolute;
+    left: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.9em; 
+    color: rgba(255, 255, 255, 0.8); */
+}
+
+
+/* Edit/Delete Buttons within Events */
+.event-buttons {
+    /* Display block for spacing */
+    display: block;
+    margin-top: 5px;
+    padding-top: 5px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    /* Hide initially, show on hover */
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity var(--transition-speed) ease, max-height var(--transition-speed) ease, margin-top var(--transition-speed) ease, padding-top var(--transition-speed) ease;
+    display: flex; /* Use flex for button layout */
+    gap: 5px; /* Space between buttons */
+}
+
+.fc-event:hover .event-buttons {
+    opacity: 1;
+    max-height: 30px; /* Adjust as needed */
+    margin-top: 5px;
+    padding-top: 5px;
+}
+
+.event-buttons button {
+    background-color: rgba(255, 255, 255, 0.2) !important; /* Semi-transparent white */
+    color: var(--text-on-primary) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    padding: 2px 6px !important; /* Very small padding */
+    font-size: 0.75rem !important; /* Tiny font */
+    border-radius: 3px !important;
+    height: auto !important;
+    line-height: 1.4 !important;
+    box-shadow: none !important;
+    transition: background-color var(--transition-speed) ease;
+}
+
+.event-buttons button:hover {
+    background-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+
+/* --- New Reservation Form Styling --- */
+form#new-reservation,
+form#edit-reservation-form /* Apply to edit form too */
+{
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Spacing between form groups */
+}
+
+form#new-reservation .form-group,
+form#edit-reservation-form .form-group
+{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Remove row styling if not needed */
+/* form#new-reservation .form-row { ... } */
+
+form#new-reservation label,
+form#edit-reservation-form label
+{
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* Use global input styling defined earlier */
+
+
+/* --- Error/Success Message Styling --- */
+.error-message,
+.success-message,
+.warning-message {
+    padding: 12px 15px;
+    border-radius: var(--border-radius);
+    margin-top: 10px;
+    margin-bottom: 10px; /* Add bottom margin */
+    font-size: 0.9rem;
+    border: 1px solid transparent;
+    opacity: 0; /* Start hidden */
+    max-height: 0; /* Start hidden */
+    overflow: hidden;
+    transition: opacity var(--transition-speed) ease, max-height var(--transition-speed) ease, margin var(--transition-speed) ease, padding var(--transition-speed) ease;
+}
+
+.error-message.show,
+.success-message.show,
+.warning-message.show {
+    opacity: 1;
+    max-height: 100px; /* Allow space */
+     margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+.error-message {
+    background-color: #fee2e2; /* Lighter red */
+    border-color: #fecaca;
+    color: #991b1b; /* Darker red text */
+}
+
+.success-message {
+    background-color: #d1fae5; /* Lighter green */
+    border-color: #a7f3d0;
+    color: #065f46; /* Darker green text */
+}
+
+.warning-message {
+    background-color: #fffbeb; /* Lighter yellow/orange */
+    border-color: #fef3c7;
+    color: #b45309; /* Darker orange text */
+}
+
+
+/* --- Loading Indicator Styling --- */
+#loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1100; /* Above everything */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--transition-speed) ease, visibility 0s var(--transition-speed); /* Fade effect */
+}
+
+#loading.show {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--transition-speed) ease, visibility 0s 0s;
+}
+
+/* Simple spinner */
+#loading::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid var(--primary-color);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
+/* --- Modal Styling --- */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+    /* Centering will be handled by the .show class */
+}
+
+/* Add .show class for when modal is active */
+.modal.show {
+    /* display: flex; Remove flex properties */
+    /* align-items: flex-start; */
+    /* justify-content: center; */
+    /* padding-top: 15vh; */
+    display: block; /* Just make it visible */
+}
+
+.modal-content {
+    background-color: var(--card-background);
+    padding: 35px 40px; /* Increased padding */
+    border: none; /* Remove border, rely on shadow */
+    width: 90%;
+    max-width: 550px; /* Slightly wider modal */
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow-lg);
+    animation: slideDown 0.4s ease-out;
+
+    /* --- Absolute Positioning --- */
+    position: absolute;
+    top: 15vh; 
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    color: var(--text-color);
+}
+
+.close-button {
+    color: var(--text-light);
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 1.6rem; /* Larger icon */
+    font-weight: normal; /* Less bold */
+    line-height: 1;
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: var(--text-color);
+    transform: scale(1.1);
+    outline: none;
+}
+
+/* Ensure modal title uses h2 style */
+.modal h2,
+.modal h3 {
+    margin: -35px -40px 20px -40px; /* Pull header to edges, adjust bottom margin */
+    padding: 20px 40px; /* Padding for header area */
+    color: var(--primary-color);
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-bottom: 1px solid var(--border-color);
+    /* padding-bottom: 15px; */
+    background-color: rgba(74, 144, 226, 0.05); /* Very light blue background */
+    border-radius: var(--border-radius) var(--border-radius) 0 0; /* Match top corners */
+}
+
+/* Style the details paragraph */
+#modal-event-details {
+    margin-bottom: 30px; /* More space before actions */
+    font-size: 0.95rem;
+    color: var(--text-color);
+    line-height: 1.7;
+    /* Optional: Add a subtle background/border 
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color); 
+    */
+}
+
+#modal-event-details strong {
+    color: var(--text-color);
+    font-weight: 500;
+    display: inline-block;
+    min-width: 80px; /* Align labels slightly */
+}
+
+/* Style the actions container */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px; /* Space between buttons */
+    margin-top: 20px; /* Space above buttons */
+    padding-top: 20px; /* Space separating from content */
+    border-top: 1px solid var(--border-color);
+}
+
+/* Apply standard button styles (Ensure HTML uses correct classes) */
+.modal-actions .button-primary { /* Assuming edit is primary */
+    /* Uses global .button-primary style */
+}
+.modal-actions .button-danger { /* Assuming delete is danger */
+     /* Uses global .button-danger style */
+}
+.modal-actions .button-secondary { /* Assuming close is secondary */
+     /* Uses global .button-secondary style */
+}
+
+
+/* Animations for Modal */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .header {
+        padding: 0 15px;
+        height: 60px;
+    }
+     body { padding-top: 60px; }
+    .header h1 { font-size: 1.1rem; }
+    #user-info { gap: 10px; font-size: 0.8rem; }
+    #logout-button { padding: 6px 10px; font-size: 0.8rem; }
+
+    .container, #app-content.container {
+        margin-top: 20px;
+        gap: 20px;
+    }
+    #app-content.container { grid-template-columns: 1fr; /* Force single column */ }
+     #calendar-section, #form-section { padding: 20px; }
+     #calendar-section h2, #form-section h2#form-title {
+         margin: -20px -20px 20px -20px;
+         padding: 15px 20px;
+         font-size: 1.05rem;
+     }
+
+    .fc .fc-toolbar { flex-wrap: wrap; /* Allow toolbar items to wrap */ }
+    .fc .fc-toolbar-title { font-size: 1.1rem !important; }
+    .fc .fc-button { padding: 5px 8px !important; font-size: 0.8rem !important;}
+
+    .modal-content { width: 95%; margin: 5vh auto; padding: 20px 25px; }
+    .modal h2 { font-size: 1.2rem; }
+
+    #filter-container { flex-direction: column; align-items: stretch; }
+    #filter-container select,
+    #filter-container input[type="date"],
+    #filter-container button {
+        min-width: 0; /* Remove min-width on small screens */
+        width: 100%; /* Full width */
+    }
+}
+
+input[type="datetime-local"],
+input[type="date"] {
+    position: relative; /* Needed for potential icon overlay */
+    padding-right: 35px; /* Make space for potential icon or just padding */
+}
+
+/* Attempt to style the native date/time picker indicator (browser support varies) */
+input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    /* background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto; */
+    opacity: 0.6; /* Make it slightly less prominent */
+    cursor: pointer;
+    transition: opacity var(--transition-speed) ease;
+}
+input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover,
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+     opacity: 1;
+}
+
+/* Firefox might need different selectors, often difficult to style */
+
+
+/* Focus style specifically for date/time */
+input[type="datetime-local"]:focus,
+input[type="date"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+/* Ensure loading overlay is visible in dark mode */
+#loading-overlay {
+    background-color: rgba(0, 0, 0, 0.7); /* Darker overlay */
+}
+body.dark-mode #loading-overlay {
+    background-color: rgba(73, 67, 67, 0.185); /* Lighter overlay for dark mode */
+}
+body.dark-mode .loading-spinner {
+     border-top-color: var(--primary-color); /* Use theme color for spinner */
+}
+body.dark-mode #loading-overlay p {
+    color: var(--text-color);
+}
